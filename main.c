@@ -62,7 +62,6 @@ int init_peer_socket (char *ip) {
 	for (aux = peerinfo; aux != NULL; aux = aux->ai_next) {
 		if ((sock = socket(aux->ai_family, aux->ai_socktype, aux->ai_protocol))
 			== -1) {
-			fprintf(stderr, "Error, could not create socket for address.\n");
 			continue;
 		}
 
@@ -95,13 +94,11 @@ int init_peer_socket (char *ip) {
 			}
 
 			/*no connection after 500ms, time out!*/
-			fprintf(stderr, "Timed out when attempting to connect to address!\n");
 			close(sock);
 		}
 
 		/*select failed, not sure why this happens when it does...*/
 		else {
-			fprintf(stderr, "Error, failed when polling connect socket!\n");
 			close(sock);
 		}
 	}
@@ -110,7 +107,6 @@ int init_peer_socket (char *ip) {
 
 	/*check if we managed to connect to any address*/
 	if (aux == NULL) {
-		fprintf(stderr, "Error, could not find valid address to connect to!\n");
 		return -1;
 	}
 
