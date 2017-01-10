@@ -41,7 +41,7 @@ int parse_message (uint8_t *msg) {
   initially received.*/
 int add_message (struct archive *arch, uint8_t *msg) {
   uint16_t len;
-  uint8_t *newmsg, *code, *md5;
+  uint8_t *code, *md5;
 
   /*parse message and get length, return if message is invalid*/
   len = parse_message(msg);
@@ -57,17 +57,13 @@ int add_message (struct archive *arch, uint8_t *msg) {
   }
   fprintf(stdout, "\n");
 
-  /*allocate memory for the final string and copy over the "tail" of the current
-  archive*/
-  newmsg = (uint8_t*) malloc(arch->len + len + 33);
-  memcpy(newmsg, (arch->str + arch->offset), (arch->len - arch->offset));
-
-  /*concatenate our new message to the archive's tail*/
-  *(newmsg + (arch->len - arch->offset)) = len;
-  memcpy(newmsg + (arch->len - arch->offset + 1), msg, len);
+  /*realloc archive string to fit the new message, then concatenate it*/
+  arch->str = realloc(arch->str, arch->len + len + 33);
+  *(arch->str + arch->len) = len;
+  memcpy(arch->str + arch->len + 1, msg, len);
 
   /*get pointers to the beginning of the code/md5 hash sections of sequence*/
-  code = (newmsg + arch->len - arch->offset + 1 + len);
+  code = arch->str + arch->len + len + 1;
   md5 = code+16;
 
   /*128bit pointer for hash comparison, 16bit pointer for 2 0-byte check*/
@@ -77,7 +73,7 @@ int add_message (struct archive *arch, uint8_t *msg) {
   /*mine a code that generates a valid MD5 hash*/
   *mineptr = (unsigned __int128) 0;
   while (1) {
-    MD5(newmsg, (arch->len - arch->offset + len + 17), md5);
+    MD5(arch->str + arch->offset, (arch->len - arch->offset + len + 17), md5);
     /*found it (first 2 bytes are 0)*/
     if (*check == 0) {
       break;
@@ -95,10 +91,6 @@ int add_message (struct archive *arch, uint8_t *msg) {
     fprintf(stdout, "%02x", *(md5+i));
   }
   fprintf(stdout, "\n\n");
-
-  /*substitute the current archive content to include new message*/
-  arch->str = realloc(arch->str, arch->len+len+33);
-  memcpy(arch->str+arch->len, newmsg + arch->len - arch->offset, len+33);
 
   /*update archive size and length, and offset if necessary*/
   arch->size += 1;
