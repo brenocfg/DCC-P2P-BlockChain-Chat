@@ -205,12 +205,12 @@ void process_peerlist (int peersock, FILE *logfile) {
 		if (!is_connected(peerlist, uip)) {
 			char ip[17];
 			snprintf(ip, 17, "%d.%d.%d.%d", buf[0], buf[1], buf[2], buf[3]);
-			fprintf(logfile, "Attempting to connect to new peer %s... \n", ip);
+			fprintf(stdout, "Attempting to connect to new peer %s... \n", ip);
 			int newpeersock = init_peer_socket(ip);
 
 			/*couldn't connect after 500ms, move on*/
 			if (newpeersock == -1) {
-				fprintf(logfile, "Failed to connect to peer %s!\n", ip);
+				fprintf(stderr, "Failed to connect to peer %s!\n", ip);
 				pthread_mutex_unlock(&peerlist_mutex);
 				continue;
 			}
