@@ -338,8 +338,9 @@ void *peer_requester_thread (void *sock) {
 	uint8_t msg[2];
 
 	/*open logfile for thread's socket*/
-	char filename[6];
-	snprintf(filename, 6, "%d.log", peersock);
+	char filename[7];
+	memset(filename, 0, 7);
+	snprintf(filename, 7, "%d.log", peersock);
 	FILE *logfile = fopen(filename, "a");
 
 	/*we have two msg bytes, one for peer requests, the other for archive*/
@@ -380,8 +381,9 @@ void *peer_receiver_thread (void *sock) {
 	int peersock = *((int*) sock);
 
 	/*open logfile for thread's socket*/
-	char filename[6];
-	snprintf(filename, 6, "%d.log", peersock);
+	char filename[7];
+	memset(filename, 0, 7);
+	snprintf(filename, 7, "%d.log", peersock);
 	FILE *logfile = fopen(filename, "a");
 
 	/*get peer name+ip information*/
