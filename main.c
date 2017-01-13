@@ -228,7 +228,7 @@ void process_peerlist (int peersock, FILE *logfile) {
 	new archive. If the validity check is successful, we replace the current
 	archive by the new one, and dump the old archive*/
 void process_archive (int peersock, FILE *logfile) {
-	fprintf(logfile, "\n----------Processing ArchiveResponse---------!\n");
+	fprintf(logfile, "\n----------Processing ArchiveResponse!---------\n");
 
 	/*get number of chats in archive*/
 	uint8_t buf[4]; uint32_t usize = 0;
