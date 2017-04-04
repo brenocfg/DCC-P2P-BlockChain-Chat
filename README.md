@@ -10,7 +10,7 @@ Strictly IPv4, because IPv6 is too much work :D.
 Extreme level of commenting, because it's a university assignment, so why not.
 
 
-#Building
+# Building #
 
 To build, simply run "make", the Makefile target rules should work for most
 Linux distributions as well as MacOS, as long as OpenSSL is installed.
@@ -20,7 +20,7 @@ NOTE: MUST be compiled with gcc for 64 bit architectures, since we use a few
 nifty x64 implementation-specific things, such as 128 bit primitive types.
 
 
-#Running
+# Running #
 
 To run the program from the command line, use the following syntax:
 
@@ -35,7 +35,7 @@ listening for connections, to avoid self-connection attempts. This could have
 been implemented more elegantly using a STUN protocol, but that would have added
 significant complexity to the project, so we use this workaround.
 
-#Functionalities
+# Functionalities #
 
 When the program is running, the terminal will prompt the user for messages to
 be added to the currently active archive. If any message typed in is valid, it
